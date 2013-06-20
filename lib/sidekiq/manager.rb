@@ -34,6 +34,7 @@ module Sidekiq
         p.proxy_id = p.object_id
         p
       end
+      @queues = options[:queues]
     end
 
     def stop(options={})
@@ -123,7 +124,7 @@ module Sidekiq
     end
 
     def procline(tag)
-      "sidekiq #{Sidekiq::VERSION} #{tag}[#{@busy.size} of #{@count} busy]#{stopped? ? ' stopping' : ''}"
+      "sidekiq #{Sidekiq::VERSION} #{tag}[#{@busy.size} of #{@count} busy]#{queues}#{stopped? ? ' stopping' : ''}"
     end
 
     private
@@ -186,6 +187,10 @@ module Sidekiq
 
     def stopped?
       @done
+    end
+
+    def queues
+      " [#{@queues.join(', ')}] "
     end
   end
 end
